@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react'
 import CategoriesContext from '../CategoriesContext';
-require('dotenv').config();
 
 
 //Components

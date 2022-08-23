@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import CategoriesContext from '../CategoriesContext';
-require('dotenv').config();
 
 export default function TicketPage({editMode}) {
 
