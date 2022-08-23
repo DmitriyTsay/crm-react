@@ -8,6 +8,7 @@ require('dotenv').config();
 const app = express()
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, './build')))
 
 const url = process.env.URL
 const token = process.env.ASTRA_TOKEN
