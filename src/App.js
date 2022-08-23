@@ -19,20 +19,16 @@ function App() {
   // Fetching categories from API
   useEffect(() => {
     const fetchCategories = async () => {
-      const tickets = await axios.get('http://localhost:8000/tickets')
+      const tickets = await axios.get(`${process.env.REACT_APP_BACKEND}/tickets`)
       
       const dataObject = tickets.data.data;
 
       const categoriesArray = Object.values(dataObject).map((ticket) => ticket.category);
 
       const categoriesSet = [ ...new Set(categoriesArray)];
-      
-      console.log(`Categories from App: ${categoriesSet}`);
 
       setCategories(categoriesSet);
     }
-    
-    console.log(`App component rendered`)
 
     fetchCategories();
   },[])

@@ -30,7 +30,7 @@ export default function TicketPage({editMode}) {
         }
 
         const fetchData = async () => {
-            const response = await axios.get(`http://localhost:8000/tickets/${id}`)
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND}/tickets/${id}`)
             
             const success = response.status == 200 
             if (success) {
@@ -54,7 +54,7 @@ export default function TicketPage({editMode}) {
         event.preventDefault()
 
         if (!editMode) {
-            const response = await axios.post(`${process.env.BACKEND}/tickets`, {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND}/tickets`, {
                 inputState
             })
             const success = response.status === 200;
@@ -62,7 +62,7 @@ export default function TicketPage({editMode}) {
                 navigate('/')
             }  
         } else {
-            const response = await axios.put(`${process.env.BACKEND}/tickets/${id}`, {
+            const response = await axios.put(`${process.env.REACT_APP_BACKEND}/tickets/${id}`, {
                 inputState
             })
             const success = response.status == 200;

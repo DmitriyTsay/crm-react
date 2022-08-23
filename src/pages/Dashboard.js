@@ -10,51 +10,11 @@ export default function Dashboard() {
 
     const [ tickets, setTickets ] = useState([]);
     const { categories, setCategories } = useContext(CategoriesContext);
-    
-    // Dummy Data (!)
-    // const tickets = [
-    //     {
-    //         category: 'Q1 2021',
-    //         color: 'red',
-    //         title: 'NFT Safety 101 Video',
-    //         owner: 'Tsay Dmitriy',
-    //         avatar: '',
-    //         status: 'done',
-    //         priority: 5,
-    //         progress: 100,
-    //         description: 'Make a video showcasing how to work with NFTs',
-    //         timestamp: '2022-08-12T01:45:20+0000',
-    //     },
-    //     {
-    //         category: 'Q1 2021',
-    //         color: 'green',
-    //         title: 'FrontEnd development',
-    //         owner: 'Tsay Dmitriy',
-    //         avatar: './avatar.jpg',
-    //         status: 'work in progress',
-    //         priority: 2,
-    //         progress: 40,
-    //         description: 'Make a video showcasing how to work with NFTs',
-    //         timestamp: '2022-08-12T01:45:20+0000',
-    //     },
-    //     {
-    //         category: 'Q2 2022',
-    //         color: 'green',
-    //         title: 'FrontEnd development',
-    //         owner: 'Tsay Dmitriy',
-    //         avatar: './avatar.jpg',
-    //         status: 'stuck',
-    //         priority: 2,
-    //         progress: 70,
-    //         description: 'Make a video showcasing how to work with NFTs',
-    //         timestamp: '2022-08-12T01:45:20+0000',
-    //     }
-    // ];
 
     // Getting data from database
     useEffect(() => {
         async function fetchTickets() {
-            const response = await axios.get(`${process.env.BACKEND}/tickets`);
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND}/tickets`);
             
             const dataObject = response.data.data;
             
