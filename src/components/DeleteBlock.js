@@ -4,7 +4,7 @@ import axios from 'axios'
 export default function DeleteBlock({ documentId }) {
 
     const deleteTicket = async (e, documentId) => {
-        const response = await axios.delete(`http://localhost:8000/tickets/${documentId}`)
+        const response = await axios.delete(`${process.env.REACT_API_BACKEND}/tickets/${documentId}`)
         const success = response.status == 204;
 
         if (success) {
