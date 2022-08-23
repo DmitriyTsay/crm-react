@@ -175,6 +175,7 @@ nav {
   align-items: center;
   justify-content: center;
   width: 50px;
+  cursor: pointer;
 }
 
 .delete-block > img {
@@ -219,6 +220,15 @@ nav {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+}
+
+.avatar-preview {
+  height: 100px;
+  width: 100px;
+}
+
+.avatar-preview > img {
+  width: 100%;
 }
 
 /* ----- COLORS ----- */

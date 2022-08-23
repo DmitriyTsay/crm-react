@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom'
+import CategoriesContext from '../CategoriesContext';
 
-export default function TicketPage() {
+export default function TicketPage({editMode}) {
 
     const [ inputState, setInputState ] = useState({
         title: '',
         description: '',
         category: 'none',
-        newCategory: '',
         priority: '1',
         time: new Date(),
         progress: 0,
@@ -14,19 +16,64 @@ export default function TicketPage() {
         avatar: '',
         status: 'work-in-progress',
     })
-    
-    // Assumption that editMode is disabled
-    const editMode = true;
 
-    function handleSubmit(event) {
+    const [ newCategoryStatus, setNewCategoryStatus ] = useState(false);
+
+    const { categories, setCategories } = useContext(CategoriesContext);
+
+    let { id } = useParams();
+    
+    // Hook to fetch TicketData if editMode is enabled
+    useEffect(() => {
+        if (!editMode) {
+            return 
+        }
+
+        const fetchData = async () => {
+            const response = await axios.get(`http://localhost:8000/tickets/${id}`)
+            
+            const success = response.status == 200 
+            if (success) {
+                const ticketData = response.data.data;
+                console.log(ticketData);
+                setInputState((prevInputState) => {
+                    return {
+                        ...ticketData
+                    }
+                })
+            }
+        }
+        
+        fetchData();
+    }, [])
+
+
+    const navigate = useNavigate();
+    
+    const handleSubmit = async (event) => {
         event.preventDefault()
-        console.log(`Submitted`);
+
+        if (!editMode) {
+            const response = await axios.post('http://localhost:8000/tickets', {
+                inputState
+            })
+            const success = response.status === 200;
+            if (success) {
+                navigate('/')
+            }  
+        } else {
+            const response = await axios.put(`http://localhost:8000/tickets/${id}`, {
+                inputState
+            })
+            const success = response.status == 200;
+            if (success) {
+                navigate('/') 
+            }
+        }
     }
 
     function handleChange(event) {
         const { value, name } = event.target;
-
-        console.log(event.target.value);
 
         setInputState((prevInputState) => {
             return {
@@ -36,7 +83,20 @@ export default function TicketPage() {
         })
     }
 
-    console.log(inputState);
+    const toggleCategory = () => {
+        setNewCategoryStatus((prevCategoryStatus) => {
+            return !prevCategoryStatus;
+        })
+
+        if (newCategoryStatus) {
+            setInputState((prevInputState) => {
+                return {
+                    ...prevInputState,
+                    category: 'none'
+                }
+            })
+        }
+    }
     
     return (
         <div className="ticket-page">
@@ -67,27 +127,39 @@ export default function TicketPage() {
 
                     {/* Category */}
                     <label htmlFor="category">Category</label>
-                    <select 
-                        id='category'
-                        name='category'
-                        value={inputState.category}
-                        onChange={handleChange}
-                    >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>none</option>
-                    </select>
+                    {newCategoryStatus
+                        ?
+                        <input 
+                            id='category'
+                            name='category'
+                            value={inputState.category}
+                            onChange={handleChange}
+                        />
+                        :
+                        <select 
+                            id='category'
+                            name='category'
+                            value={inputState.category}
+                            onChange={handleChange}
+                        >
+                            {categories?.map((category) => {
+                                return <option>{category}</option>
+                            })}
+                            <option>none</option>
+                        </select>
+                    }
 
-                    {/* New Category */}
+                    {/* New Category - toggle checkbox */}
                     <label htmlFor="newCategory">New Category</label>
-                    <input 
-                        type='text'
-                        id='newCategory'
-                        name='newCategory'
-                        onChange={(event) => {handleChange(event)}}
-                        value={inputState.newCategory}
-                    />
+                    <div>
+                        <input 
+                            type='checkbox'
+                            id='newCategory'
+                            name='newCategory'
+                            onChange={(event) => {toggleCategory(event)}}
+                            checked={newCategoryStatus}
+                        />
+                    </div>
 
                     {/* Priority */}
                     <label htmlFor="priority">Priority</label>
@@ -178,6 +250,10 @@ export default function TicketPage() {
                         onChange={(event) => {handleChange(event)}}
                         value={inputState.avatar}
                     />
+
+                    {inputState.avatar && <div className='avatar-preview'>
+                        <img src={inputState.avatar} alt='avatar' />
+                    </div>}
                 </section> }
             </form>
         </div>
