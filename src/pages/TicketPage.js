@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import CategoriesContext from '../CategoriesContext';
+require('dotenv').config();
 
 export default function TicketPage({editMode}) {
 
@@ -54,7 +55,7 @@ export default function TicketPage({editMode}) {
         event.preventDefault()
 
         if (!editMode) {
-            const response = await axios.post('http://localhost:8000/tickets', {
+            const response = await axios.post(`${process.env.BACKEND}/tickets`, {
                 inputState
             })
             const success = response.status === 200;
@@ -62,7 +63,7 @@ export default function TicketPage({editMode}) {
                 navigate('/')
             }  
         } else {
-            const response = await axios.put(`http://localhost:8000/tickets/${id}`, {
+            const response = await axios.put(`${process.env.BACKEND}/tickets/${id}`, {
                 inputState
             })
             const success = response.status == 200;

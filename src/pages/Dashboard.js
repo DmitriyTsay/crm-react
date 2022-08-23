@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState, useEffect, useContext } from 'react'
 import CategoriesContext from '../CategoriesContext';
+require('dotenv').config();
 
 
 //Components
@@ -54,7 +55,7 @@ export default function Dashboard() {
     // Getting data from database
     useEffect(() => {
         async function fetchTickets() {
-            const response = await axios.get('http://localhost:8000/tickets');
+            const response = await axios.get(`${process.env.BACKEND}/tickets`);
             
             const dataObject = response.data.data;
             
